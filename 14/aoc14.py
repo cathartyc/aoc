@@ -86,7 +86,7 @@ def sand_next_step(sand: Solid) -> Solid:
     return sand
 
 start = time.time()
-with open('inputs/142', 'r') as file:
+with open('inputs/14', 'r') as file:
     while True:
         l = file.readline()
         if not l:
