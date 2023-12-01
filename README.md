@@ -8,7 +8,9 @@ The goals for the 2023's edition are:
 - most importantly, do not overburn over a problem: no one is gonna fry me for being late. I do not need a second job, I need to have fun
 
 The goals for the 2022's edition were:
-|---|---|
+
+| Goal | Result |
+| :--- | :--- |
 | solve the puzzles in Python 3.10 | done 14/25 |
 | learn to write better 'pythonic' code | maybe done |
 | do it *faster* | c'mon who is slow with Python (I am) |
