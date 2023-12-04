@@ -6,6 +6,7 @@ The goals for the 2023's edition are:
 - solve the puzzles in Rust
 - actually learn Rust by doing that
 - ditch VS Code in favor of Neovim (this includes debugging)
+- **DO NOT** use ChatGPT to help myself in any case (no need to learn how to ask questions)
 - most importantly, do not overburn over a problem: no one is gonna fry me for being late. I do not need a second job, I need to have fun
 
 The goals for the 2022's edition were:
