@@ -1,4 +1,4 @@
-use std::{fs, u32, char};
+use std::{char, fs, u32};
 
 fn main() {
     let input: &str = "../inputs/input1";
@@ -22,9 +22,9 @@ fn main() {
                 last = chars[i].to_digit(10).unwrap();
                 println!("The second is {}", last);
                 break;
-            } 
-        }   
-        sum += first*10 + last;
+            }
+        }
+        sum += first * 10 + last;
         println!("The actual value now is {}", sum);
     }
     println!("{}", sum);

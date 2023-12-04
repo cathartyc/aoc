@@ -18,16 +18,20 @@ fn main() {
                 let amount = comb.next().clone();
                 let amount: usize = amount.unwrap().parse().expect("Not a number");
                 let col: &str = comb.next().unwrap();
-                if amount > max[color.iter().position(|&c| c == col).expect("It should be here")] {
+                if amount
+                    > max[color
+                        .iter()
+                        .position(|&c| c == col)
+                        .expect("It should be here")]
+                {
                     too_much = true;
                     break 'out;
                 }
-            } 
+            }
         }
         if !too_much {
             id_sum += game_id;
         }
-
     }
     println!("{}", id_sum);
 }

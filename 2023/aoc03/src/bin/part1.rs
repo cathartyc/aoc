@@ -14,10 +14,11 @@ struct Symbol {
 }
 
 fn make_serial(val: String, last_pos: usize) -> Component {
-    Component { 
-        value: val.parse().expect("Should be a number here"), 
+    Component {
+        value: val.parse().expect("Should be a number here"),
         start: last_pos - val.len(),
-        end: last_pos - 1 }
+        end: last_pos - 1,
+    }
 }
 
 fn sum_and_reduce(symbols: &Vec<Symbol>, components: &mut Vec<Component>) -> u32 {
@@ -25,7 +26,7 @@ fn sum_and_reduce(symbols: &Vec<Symbol>, components: &mut Vec<Component>) -> u32
     for symbol in symbols.iter() {
         sum += components
             .iter()
-            .filter(|&c| symbol.start <= c.end && symbol.end >= c.start) 
+            .filter(|&c| symbol.start <= c.end && symbol.end >= c.start)
             .map(|c| c.value)
             .sum::<u32>();
         components.retain(|c| symbol.start >= c.end || symbol.end <= c.start);
@@ -37,13 +38,13 @@ fn main() -> Result<(), Error> {
     let input = File::open("../inputs/input3")?;
     let input = BufReader::new(input);
     let mut previous_line: Vec<Component> = Vec::new();
-    let mut curr_line: Vec<Component> = Vec::new(); 
+    let mut curr_line: Vec<Component> = Vec::new();
     let mut prev_symbols: Vec<Symbol> = Vec::new();
     let mut symbols: Vec<Symbol> = Vec::new();
     let mut val: String = "".to_string();
     let mut total: u32 = 0;
     for line in input.lines() {
-        for (i, ch) in line.as_ref().unwrap().chars().enumerate() { 
+        for (i, ch) in line.as_ref().unwrap().chars().enumerate() {
             if ch.is_ascii_digit() {
                 val.push(ch);
                 continue;
@@ -55,7 +56,10 @@ fn main() -> Result<(), Error> {
             if ch == '.' {
                 continue;
             } else {
-                symbols.push(Symbol { start: i-1, end: i+1 });
+                symbols.push(Symbol {
+                    start: i - 1,
+                    end: i + 1,
+                });
             }
         }
         if !val.is_empty() {

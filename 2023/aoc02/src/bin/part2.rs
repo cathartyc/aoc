@@ -15,13 +15,18 @@ fn main() {
                 let amount = comb.next();
                 let amount: usize = amount.unwrap().parse().expect("Not a number");
                 let col: &str = comb.next().unwrap();
-                let index: usize = color.iter().position(|&c| c == col).expect("It should be here").try_into().unwrap();
+                let index: usize = color
+                    .iter()
+                    .position(|&c| c == col)
+                    .expect("It should be here")
+                    .try_into()
+                    .unwrap();
                 if amount > max[index] {
                     max[index] = amount;
                 }
-            } 
+            }
         }
-        power_sum += max.iter().copied().reduce(|a, b| a*b).unwrap();
+        power_sum += max.iter().copied().reduce(|a, b| a * b).unwrap();
     }
     println!("{}", power_sum);
 }
