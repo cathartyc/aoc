@@ -17,7 +17,7 @@ The goals for the 2022's edition were:
 
 | Goal | Result |
 | :--- | :--- |
-| solve the puzzles in Python 3.10 | done 14/25 |
+| solve the puzzles in Python 3.10 | done 15/25 |
 | learn to write better 'pythonic' code | maybe done |
 | do it *faster* | c'mon who is slow with Python (I am) |
 | get familiar with the US layout (just for fun) | done, I now have an headache because I regularly switch from IT to US |
