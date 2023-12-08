@@ -1,5 +1,9 @@
 # Advent of Code
 
+**In case anyone was wondering if I already gave up — no, I did not. I will recover them (2022 included) slowly, probably after January 2024.**
+
+---
+
 My own attempts to solve the AoC daily puzzles.
 
 The goals for the 2023's edition are:
