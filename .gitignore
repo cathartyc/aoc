@@ -1,2 +1,3 @@
 .vscode/
 target/
+.gdb_history
