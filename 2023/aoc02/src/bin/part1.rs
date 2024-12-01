@@ -15,7 +15,7 @@ fn main() {
             let div = ext.split(", ");
             for comb in div {
                 let mut comb = comb.split(" ");
-                let amount = comb.next().clone();
+                let amount = comb.next();
                 let amount: usize = amount.unwrap().parse().expect("Not a number");
                 let col: &str = comb.next().unwrap();
                 if amount
