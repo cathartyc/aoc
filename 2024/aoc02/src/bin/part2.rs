@@ -2,58 +2,41 @@ use std::error::Error;
 use std::fs;
 use std::path::PathBuf;
 
-fn check_safety(levels: &Vec<i8>, tolerate: bool) -> bool {
+/// Removes an element from the given array.
+fn exclude_level(vec: &[i8], index: usize) -> Vec<i8> {
+    vec[..index]
+        .iter()
+        .chain(&vec[index + 1..])
+        .cloned()
+        .collect()
+}
+
+/// Checks if the given report is safe.
+///
+/// If a report is unsafe, applies the Problem dampener on the three
+/// levels adjacent to the first bad event, that consists in
+/// checking the same report after having removed one of those levels
+/// at a time.
+///
+/// The recursion is tracked by the tolerate parameter, which is false in
+/// a recursive call.
+fn check_safety(report: &[i8], tolerate: bool) -> bool {
     let mut trend: bool = false;
-    for i in 0..levels.len() - 1 {
-        let diff = levels[i + 1] - levels[i];
-        if diff.abs() > 3 || diff == 0 {
-            if !tolerate {
-                return false;
-            } else {
-                let mut levels_a = levels.clone();
-                levels_a.remove(i);
-                let mut levels_b = levels.clone();
-                levels_b.remove(i + 1);
-                if check_safety(&levels_a, false) {
-                    println!("{levels:?} is safe by removing {}", levels[i]);
-                    return true
-                } else if check_safety(&levels_b, false) {
-                    println!("{levels:?} is safe by removing {}", levels[i + 1]);
-                    return true
-                } else {
-                    return false;
-                }
-            }
-        }
+    for i in 0..report.len() - 1 {
+        let diff = report[i + 1] - report[i];
         if i == 0 {
-            trend = levels[i] < levels[i + 1];
-        } else if (diff > 0 && !trend) || (diff < 0 && trend) {
+            trend = report[i] < report[i + 1];
+        }
+        if diff.abs() > 3 || diff == 0 || (diff > 0 && !trend) || (diff < 0 && trend) {
             if !tolerate {
                 return false;
             } else {
-                let mut levels_a = levels.clone();
-                levels_a.remove(i);
-                let mut levels_b = levels.clone();
-                levels_b.remove(i + 1);
-                let mut levels_c = levels.clone();
-                levels_c.remove(i - 1);
-                if check_safety(&levels_a, false) {
-                    println!("{levels:?} is safe by removing {}", levels[i]);
-                    return true
-                } else if check_safety(&levels_b, false) {
-                    println!("{levels:?} is safe by removing {}", levels[i + 1]);
-                    return true
-                } else if check_safety(&levels_c, false) {
-                    println!("{levels:?} is safe by removing {}", levels[i - 1]);
-                    return true
-                } else {
-                    return false;
-                }
+                return check_safety(&exclude_level(report, i), false)
+                    || (i < report.len() - 1
+                        && check_safety(&exclude_level(report, i + 1), false))
+                    || (i > 0 && check_safety(&exclude_level(report, i - 1), false));
             }
         }
-    }
-    if tolerate {
-        println!("{levels:?} is safe");
     }
     true
 }
@@ -66,12 +49,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     for line in input.lines() {
         let levels: Vec<i8> = line
             .split(' ')
-            .map(|lev| lev.parse::<i8>().unwrap())
-            .collect();
+            .map(|lev| lev.parse())
+            .collect::<Result<Vec<i8>, _>>()?;
         if check_safety(&levels, true) {
             safe_reports += 1;
-        } else {
-            println!("{levels:?} is not safe");
         }
     }
     println!("{safe_reports}");
