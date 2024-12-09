@@ -7,7 +7,6 @@ struct Block {
     id: u32,
     start: u32,
     size: u32,
-    moved: bool,
 }
 
 struct Space {
@@ -29,7 +28,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut checksum: u128 = 0;
     //
     let mut files: Vec<Block> = vec![];
-    let mut moved_files: Vec<Block> = vec![];
     let mut free_spaces: Vec<Space> = vec![];
     // In this puzzle, the input is a single line.
     for ch in input.chars() {
@@ -39,7 +37,6 @@ fn main() -> Result<(), Box<dyn Error>> {
                 id: block_index,
                 start: block_step,
                 size: val,
-                moved: false,
             });
             block_index += 1;
         } else {
@@ -61,14 +58,11 @@ fn main() -> Result<(), Box<dyn Error>> {
                 space.size -= file.size;
                 space.start += file.size;
             }
-            None => {
-                file.moved = true;
-            }
+            None => continue,
         }
         free_spaces.retain(|x| x.size > 0);
     }
     // Printing and evaluating
-    files.extend(moved_files);
     let mut index = 0;
     files.sort_by(|a, b| a.start.cmp(&b.start));
     for file in files {
