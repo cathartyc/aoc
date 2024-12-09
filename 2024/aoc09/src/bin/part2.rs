@@ -51,28 +51,21 @@ fn main() -> Result<(), Box<dyn Error>> {
         block_step += val;
         is_block = !is_block;
     }
-    loop {
-        let mut movements = false;
-        'spaces: for space in free_spaces.iter_mut() {
-            for file in files.iter_mut().rev().filter(|x| x.start > space.start) {
-                if file.size <= space.size {
-                    if !movements {
-                        movements = true;
-                    }
-                    file.moved = true;
-                    file.start = space.start;
-                    space.size -= file.size;
-                    space.start += file.size;
-                    moved_files.push(*file);
-                    break 'spaces;
-                }
+    for file in files.iter_mut().rev() {
+        match free_spaces
+            .iter_mut()
+            .find(|s| file.size <= s.size && file.start > s.start)
+        {
+            Some(space) => {
+                file.start = space.start;
+                space.size -= file.size;
+                space.start += file.size;
+            }
+            None => {
+                file.moved = true;
             }
         }
-        files.retain(|x| !x.moved);
         free_spaces.retain(|x| x.size > 0);
-        if !movements {
-            break;
-        }
     }
     // Printing and evaluating
     files.extend(moved_files);
