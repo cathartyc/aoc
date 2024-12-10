@@ -1,3 +1,4 @@
+use ahash::RandomState;
 use std::collections::{HashMap, HashSet};
 use std::error::Error;
 use std::fs;
@@ -33,8 +34,8 @@ struct State {
 fn next_destination(
     state: &State,
     dir: &Direction,
-    rows: &HashMap<usize, Vec<usize>>,
-    cols: &HashMap<usize, Vec<usize>>,
+    rows: &HashMap<usize, Vec<usize>, RandomState>,
+    cols: &HashMap<usize, Vec<usize>, RandomState>,
     bounds: &State,
 ) -> (State, bool) {
     let mut quit = false;
@@ -95,12 +96,12 @@ fn next_destination(
 /// adding the obstruction to the list of obstacles.
 fn is_loop(
     start: &State,
-    rows: &HashMap<usize, Vec<usize>>,
-    cols: &HashMap<usize, Vec<usize>>,
+    rows: &HashMap<usize, Vec<usize>, RandomState>,
+    cols: &HashMap<usize, Vec<usize>, RandomState>,
     bounds: &State,
     obstruction: &State,
 ) -> bool {
-    let mut visited: HashSet<(State, Direction)> = HashSet::new();
+    let mut visited: HashSet<(State, Direction), RandomState> = HashSet::default();
     let mut state = *start;
     let mut rows = rows.clone();
     let mut cols = cols.clone();
@@ -139,10 +140,10 @@ fn find_obstructions(
     start: &State,
     dir: &Direction,
     bounds: &State,
-    rows: &HashMap<usize, Vec<usize>>,
-    cols: &HashMap<usize, Vec<usize>>,
-) -> (HashSet<State>, bool) {
-    let mut obstructions: HashSet<State> = HashSet::new();
+    rows: &HashMap<usize, Vec<usize>, RandomState>,
+    cols: &HashMap<usize, Vec<usize>, RandomState>,
+) -> (HashSet<State, RandomState>, bool) {
+    let mut obstructions: HashSet<State, RandomState> = HashSet::default();
     let (destination, quit) = next_destination(state, dir, rows, cols, bounds);
     let range = match dir {
         Direction::Up => destination.x + 1..=state.x,
@@ -200,8 +201,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     path.push("../inputs/input6.txt");
     let input = fs::read_to_string(path)?;
     // Code
-    let mut rows: HashMap<usize, Vec<usize>> = HashMap::new();
-    let mut cols: HashMap<usize, Vec<usize>> = HashMap::new();
+    let mut rows: HashMap<usize, Vec<usize>, RandomState> = HashMap::default();
+    let mut cols: HashMap<usize, Vec<usize>, RandomState> = HashMap::default();
     let mut bounds = State { x: 0, y: 0 };
     // Start mutable because if not initialized could cause troubles
     let mut start: Option<State> = None;
@@ -232,7 +233,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut state = start.unwrap();
     let mut dir = Direction::Up;
 
-    let mut total_obstructions: HashSet<State> = HashSet::new();
+    let mut total_obstructions: HashSet<State, RandomState> = HashSet::default();
     loop {
         let (obstructions, quit) =
             find_obstructions(&mut state, &start.unwrap(), &dir, &bounds, &rows, &cols);
