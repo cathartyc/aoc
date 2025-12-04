@@ -34,9 +34,7 @@ const PACK_SIZE: usize = 12;
 
 fn part_2(input: &str) -> u64 {
     let mut sum: u64 = 0;
-    input
-        .lines()
-        .for_each(|bank| {
+    input.lines().for_each(|bank| {
         let mut batteries = vec![];
         let mut next_index = 0;
         while batteries.len() < PACK_SIZE {
